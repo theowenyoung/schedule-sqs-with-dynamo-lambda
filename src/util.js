@@ -16,6 +16,6 @@ exports.recordToQueueMessage = record => {
   return {
     Id: record.id,
     MessageBody: MessageBody,
-    DelaySeconds: dueToTime
+    DelaySeconds: Math.floor(dueToTime / 1000)
   };
 };
