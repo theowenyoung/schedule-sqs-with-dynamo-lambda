@@ -42,7 +42,8 @@ exports.handler = async (event, context) => {
         });
       });
       if (sendPromises.length > 0) {
-        await Promise.all(sendPromises);
+        const results = await Promise.all(sendPromises);
+        debug('results', results);
         // delete the db records
         await Schedule.batchDelete(records.map(item => item.id));
       } else {
