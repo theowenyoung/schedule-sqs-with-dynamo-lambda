@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi');
 const { nanoid } = require('nanoid');
 const debug = require('debug')('schedule-sqs');
 const { sendMessageBatch } = require('./sqs');
-const { maxDelayTimeSeconds } = require('./constans');
+const { maxDelayTime } = require('./constans');
 const { recordToQueueMessage } = require('./util');
 exports.handler = async (event, context) => {
   // receive sqs message
@@ -51,7 +51,8 @@ exports.handler = async (event, context) => {
         queueUrl: value.queue_url,
         payload: value.payload ? value.payload : {},
         triggeredAt: value.triggered_at,
-        id: nanoid()
+        id: nanoid(),
+        status: 'active'
       };
       let dueToTime = record.triggeredAt - Date.now();
       if (dueToTime > 0) {
@@ -60,7 +61,7 @@ exports.handler = async (event, context) => {
         dueToTime = 0;
       }
       debug('dueToTime %s', dueToTime);
-      if (dueToTime < maxDelayTimeSeconds) {
+      if (dueToTime < maxDelayTime) {
         // direct push to consumer queue
         if (queueMap[record.queueUrl]) {
           queueMap[record.queueUrl].push(record);

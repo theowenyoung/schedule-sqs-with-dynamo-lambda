@@ -6,3 +6,4 @@ parserOptions:
 rules:
   'space-before-function-paren': 'off'
   'require-atomic-updates': 'off'
+  'newline-per-chained-call': 'off'

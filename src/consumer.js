@@ -1,7 +1,7 @@
 const Schedule = require('./schedule.model');
 const { sendMessageBatch } = require('./sqs');
 const debug = require('debug')('schedule-receive');
-const { maxDelayTimeSeconds } = require('./constans');
+const { maxDelayTime } = require('./constans');
 const { recordToQueueMessage } = require('./util');
 exports.handler = async (event, context) => {
   // receive sqs message
@@ -10,12 +10,13 @@ exports.handler = async (event, context) => {
   debug('context %s', JSON.stringify(context, null, 2));
   // scan dynamo
   try {
-    const dueToTime = Date.now() + maxDelayTimeSeconds;
-    const records = await Schedule.query('triggeredAt')
-      .lt(dueToTime)
-      .and()
-      .where('status')
+    const dueToTime = Date.now() + maxDelayTime;
+    debug('dueToTime: %s', dueToTime);
+    const records = await Schedule.query('status')
       .eq('active')
+      .and()
+      .where('triggeredAt')
+      .lt(dueToTime)
       .exec();
     debug('records.length %s', records.length);
     if (records.length > 0) {
@@ -41,7 +42,9 @@ exports.handler = async (event, context) => {
         });
       });
       if (sendPromises.length > 0) {
-        return Promise.all(sendPromises);
+        await Promise.all(sendPromises);
+        // delete the db records
+        // TODO
       } else {
         debug('no records need to handle');
       }

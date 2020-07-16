@@ -16,19 +16,18 @@ const schema = new db.Schema(
     },
     status: {
       type: String,
-      defualt: 'active',
+      enum: ['active', 'inactive'],
+      required: true,
+      default: 'active',
       index: {
-        name: 'statusIndex',
-        global: true
+        name: 'StatusIndex',
+        global: true,
+        rangeKey: 'triggeredAt'
       }
     },
     triggeredAt: {
       type: Number,
-      required: true,
-      index: {
-        name: 'triggeredAtIndex',
-        global: true
-      }
+      required: true
     }
   },
   {

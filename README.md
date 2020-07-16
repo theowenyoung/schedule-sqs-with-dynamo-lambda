@@ -17,7 +17,7 @@ We use the SQS can delay 15 minutes, and a 10 minutes schedule lambda function t
 
 ### 1. Create tables
 
-Your can run `yarn db:show` to look the tables structure details, or direct create a table named `schedule_queue_schedules` at [console](https://console.aws.amazon.com/dynamodb/home), with the Primary key `id`, type: `String`, and Secondary indexes with `status<String>`,`triggeredAt(Number)`
+Your can run `yarn db:show` to look the tables structure details, or direct create a table named `schedule_queue_schedules` at [console](https://console.aws.amazon.com/dynamodb/home), with the Primary key `id`, type: `String`, and Secondary indexes with `StatusIndex(String)` , rangeKey `triggeredAt(Number)`
 
 or, if you set the enviroment `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, you can run follow commands to create db tables for aws dynamodb
 
