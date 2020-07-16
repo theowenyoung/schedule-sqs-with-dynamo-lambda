@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for sam-app
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+Mappings:
+  Layers:
+    NodeModules:
+      ARN: arn:aws:lambda:us-west-1:912951144733:layer:ScheduleSQSLayer:2
+
+Resources:
+  RecieveFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: receive-lambda.handler
+      Runtime: nodejs12.x
+      Policies:
+        # Give DynamoDB Full Access to your Lambda Function
+        - AmazonDynamoDBFullAccess
+        - AmazonSQSFullAccess
+      Layers:
+        - { 'Fn::FindInMap': ['Layers', 'NodeModules', 'ARN'] }
+      Environment:
+        Variables:
+          RECEIVE_QUEUE_NAME: schedule_receive_queue
+          DEBUG: schedule*
+      Events:
+        ScheduleReceiveQueueEVENT:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt ScheduleReceiveQueue.Arn
+            BatchSize: 10
+  ConsumerFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./dist
+      Handler: consumer-lambda.handler
+      Runtime: nodejs12.x
+      Policies:
+        # Give DynamoDB Full Access to your Lambda Function
+        - AmazonDynamoDBFullAccess
+        - AmazonSQSFullAccess
+      Layers:
+        - { 'Fn::FindInMap': ['Layers', 'NodeModules', 'ARN'] }
+      Environment:
+        Variables:
+          DEBUG: schedule*
+      Events:
+        ScheduleEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(10 minutes)
+            Name: queue-cosnumer-schedule
+            Description: evenry 10 minutes check run
+            Enabled: True
+  ScheduleReceiveQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: schedule_receive_queue

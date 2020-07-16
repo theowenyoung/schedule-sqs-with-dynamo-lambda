@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    image: amazon/dynamodb-local
+    ports:
+      - '8000:8000'
+  build:
+    image: lambci/lambda:build-nodejs12.x
+    volumes:
+      - '.:/var/task:delegated'
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+    command:
+      - sh
+      - -c
+      - sam build
+  build-layer:
+    image: lambci/lambda:build-nodejs12.x
+    volumes:
+      - './layer:/var/task:delegated'
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+    command:
+      - sh
+      - -c
+      - sam build

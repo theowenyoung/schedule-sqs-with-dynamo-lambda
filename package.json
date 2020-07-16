@@ -1,0 +1,35 @@
+{
+  "name": "schedule-sqs-with-dynamo-lambda",
+  "version": "1.0.0",
+  "description": "Schedule aws sqs with dynamodb and lambda",
+  "main": "index.js",
+  "repository": "https://github.com/theowenyoung/schedule-sqs-with-dynamo-lambda",
+  "author": "Owen Young",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "db:init": "node tools/init",
+    "db:show": "node tools/show",
+    "db:rm": "node tools/reset",
+    "build": "rm -rf ./dist && NODE_ENV=production webpack && cd dist && npm init --yes",
+    "fix": "yarn lint --fix",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.0.3",
+    "eslint": "^7.4.0",
+    "eslint-config-kasa": "^0.5.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-node-externals": "^2.5.0"
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "debug": "^4.1.1",
+    "dynamoose": "^2.2.1",
+    "fs-extra": "^9.0.1",
+    "nanoid": "^3.1.10"
+  }
+}

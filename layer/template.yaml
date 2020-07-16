@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for sam-app
+
+Resources:
+  ScheduleSQSDependenceLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: ScheduleSQSLayer
+      Description: Layer description
+      ContentUri: '.'
+      CompatibleRuntimes:
+        - nodejs12.x
+      LicenseInfo: 'Available under the MIT-0 license.'
+      RetentionPolicy: Retain

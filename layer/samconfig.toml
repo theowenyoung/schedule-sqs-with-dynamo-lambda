@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "schedule-dependence-layer"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ai45xr4lbipn"
+s3_prefix = "schedule-dependence-layer"
+region = "us-west-1"
+capabilities = "CAPABILITY_IAM"
+

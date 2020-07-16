@@ -1,0 +1,8 @@
+root: true
+extends:
+  - 'kasa'
+parserOptions:
+  sourceType: 'script'
+rules:
+  'space-before-function-paren': 'off'
+  'require-atomic-updates': 'off'
