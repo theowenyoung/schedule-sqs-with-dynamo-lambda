@@ -44,7 +44,7 @@ exports.handler = async (event, context) => {
       if (sendPromises.length > 0) {
         await Promise.all(sendPromises);
         // delete the db records
-        // TODO
+        await Schedule.batchDelete(records.map(item => item.id));
       } else {
         debug('no records need to handle');
       }
