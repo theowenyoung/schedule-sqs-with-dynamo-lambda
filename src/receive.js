@@ -88,6 +88,7 @@ exports.handler = async (event, context) => {
       promises = promises.concat(Schedule.batchPut(dbRecords));
     }
     if (promises.length > 0) {
+      // todo error handle
       return Promise.all(promises);
     } else {
       return {};

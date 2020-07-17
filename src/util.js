@@ -19,3 +19,8 @@ exports.recordToQueueMessage = record => {
     DelaySeconds: Math.floor(dueToTime / 1000)
   };
 };
+
+exports.reportError = error => {
+  // eslint-disable-next-line no-console
+  console.error('error', error);
+};
